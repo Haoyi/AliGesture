@@ -868,7 +868,7 @@ public class ErrorReporter implements UncaughtExceptionHandler {
 
         final CharSequence tickerText = mContext.getText(conf.resNotifTickerText());
         final long when = System.currentTimeMillis();
-        final Notification notification = new Notification(icon, tickerText, when);
+//        final Notification notification = new Notification(icon, tickerText, when);
 
         final CharSequence contentTitle = mContext.getText(conf.resNotifTitle());
         final CharSequence contentText = mContext.getText(conf.resNotifText());
@@ -877,8 +877,23 @@ public class ErrorReporter implements UncaughtExceptionHandler {
         final Intent crashReportDialogIntent = createCrashReportDialogIntent(reportFileName, reportBuilder);
         final PendingIntent contentIntent = PendingIntent.getActivity(mContext, mNotificationCounter++, crashReportDialogIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        notification.setLatestEventInfo(mContext, contentTitle, contentText, contentIntent);
-        notification.flags = notification.flags | Notification.FLAG_AUTO_CANCEL;
+//        notification.setLatestEventInfo(mContext, contentTitle, contentText, contentIntent);
+//        notification.flags = notification.flags | Notification.FLAG_AUTO_CANCEL;
+
+        Notification.Builder builder = new Notification.Builder(mContext);
+        builder.setSmallIcon(icon); //设置图标
+        builder.setTicker(tickerText);
+        builder.setContentTitle(contentTitle); //设置标题
+        builder.setContentText(contentText); //消息内容
+        builder.setWhen(when); //发送时间
+        builder.setDefaults(Notification.DEFAULT_ALL); //设置默认的提示音，振动方式，灯光
+        builder.setAutoCancel(true);//打开程序后图标消失
+        builder.setContentIntent(contentIntent);
+        Notification notification = builder.build();
+
+
+
+
 
         // The deleteIntent is invoked when the user swipes away the Notification.
         // In this case we invoke the CrashReportDialog with EXTRA_FORCE_CANCEL==true
